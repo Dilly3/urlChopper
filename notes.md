@@ -11,3 +11,6 @@
  errs.Wrap(ErrRedirectInvalid, "service.Redirect.Store")
 
  ```
+
+ ### 
+ go get github.com/gofiber/fiber/v2
