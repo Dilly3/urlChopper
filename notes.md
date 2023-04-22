@@ -6,3 +6,8 @@
 // genate short id
 
 ###  go get github.com/pkg/errors
+ used to write stack trace of errors
+ ``` GO
+ errs.Wrap(ErrRedirectInvalid, "service.Redirect.Store")
+
+ ```
