@@ -57,7 +57,7 @@
 The Url redirects to the orignal Url .
 
 Example 
- <span style="color:Aqua">localhost:8000/hbS9RwPVR</span>  redirects to ***https://www.udemy.com***
+ <span style="color:Aqua">localhost:8000/910HGwEVR</span>  redirects to ***https://www.udemy.com***
 
  <br>
 
@@ -78,4 +78,8 @@ MONGO_TIMEOUT=30
 Run Program
 
 ```GO
-terminal> make run
+terminal> 
+>> go mod tidy
+
+>> make run
+```
