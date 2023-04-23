@@ -20,6 +20,7 @@ type MongoRepository struct {
 
 const (
 	REDIRECTS = "redirects"
+	DB        = "urlshorter"
 )
 
 func NewMongoRepository(mongoUrl string, mongoTimeout int, mongoDbName string) (*MongoRepository, error) {
@@ -30,34 +31,37 @@ func NewMongoRepository(mongoUrl string, mongoTimeout int, mongoDbName string) (
 	if err != nil {
 		return nil, err
 	}
+
 	repo.client = client
-	repo.database = mongoDbName
+	repo.database = DB
 	repo.timeout = time.Duration(mongoTimeout)
 	return repo, nil
 }
 
 func newMongoClient(mongoUrl string, mongoTimeout int) (*mongo.Client, error) {
+
+	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
+	clientOptions := options.Client().
+		ApplyURI(mongoUrl).
+		SetServerAPIOptions(serverAPIOptions)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(mongoTimeout)*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoUrl))
-
+	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		return nil, err
 	}
-	err = client.Ping(ctx, readpref.Primary())
-	if err != nil {
+	if err := client.Ping(ctx, readpref.Primary()); err != nil {
 		return nil, err
 	}
+	DBMigration(client, DB, REDIRECTS)
 	return client, nil
 }
-
 func (m *MongoRepository) Find(code string) (*internal.Redirect, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
-	defer cancel()
 	redirect := &internal.Redirect{}
-	collection := getCollection(m.client, m.database, REDIRECTS)
+
 	filter := bson.M{"code": code}
-	err := collection.FindOne(ctx, filter).Decode(redirect)
+	err := m.getCollection(REDIRECTS).FindOne(context.Background(), filter).Decode(redirect)
+
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, errors.Wrap(internal.ErrRedirectNotFound, "repository.mongoDb.Find")
@@ -68,12 +72,11 @@ func (m *MongoRepository) Find(code string) (*internal.Redirect, error) {
 
 }
 
-func (m *MongoRepository) Store(redirect internal.Redirect) error {
-	ctx, cancel := context.WithTimeout(context.Background(), m.timeout)
-	defer cancel()
+func (m *MongoRepository) Store(redirect *internal.Redirect) error {
+
 	collection := getCollection(m.client, m.database, REDIRECTS)
 	_, err := collection.InsertOne(
-		ctx, bson.M{
+		context.Background(), bson.M{
 			"code":       redirect.Code,
 			"url":        redirect.Url,
 			"created_at": redirect.CreatedAt,
@@ -86,5 +89,19 @@ func (m *MongoRepository) Store(redirect internal.Redirect) error {
 }
 
 func getCollection(mClient *mongo.Client, database string, collection string) *mongo.Collection {
-	return mClient.Database(database).Collection(collection)
+	return mClient.Database(DB).Collection(REDIRECTS)
+}
+func (m *MongoRepository) getCollection(collection string) *mongo.Collection {
+	return m.client.Database(DB).Collection(REDIRECTS)
+}
+
+func DBMigration(client *mongo.Client, dbName string, collectionName string) {
+	db := client.Database(dbName)
+	command := bson.D{{Key: "create", Value: REDIRECTS}}
+	var result bson.M
+	if err := db.RunCommand(context.TODO(), command).Decode(&result); err != nil {
+		if err == errors.New("collection already exists") {
+			//do nothing
+		}
+	}
 }
