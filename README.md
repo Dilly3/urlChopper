@@ -1,4 +1,4 @@
-# Url Shortner
+# Url Shortener
 
 ### A Simple Url transformer/Shortener . Given any Url it returns a Redirect object that contain a redirect code for the given URL
 
@@ -61,7 +61,8 @@ Example
 
  ## Start Program
 
- ###  .env file
+### setup .env file
+ 
 
  ```GO
 
@@ -71,6 +72,8 @@ MONGO_URL={mongodb url}
 MONGO_TIMEOUT=30
 
 ```
+
+Run Program
 
 ```GO
 terminal> make run
