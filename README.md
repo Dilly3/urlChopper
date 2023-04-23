@@ -48,7 +48,7 @@
 }
 ```
 ## GET
-*  <span style="color:Orange">localhost:8000/{code}</span>
+*  ### <span style="color:Orange">localhost:8000/{code}</span>
 
  Use the code in the response body returned from the **POST** request to make a call to the GET endpoint   **localhost:8000**
 
