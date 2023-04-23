@@ -33,8 +33,9 @@
 >> Request Body 
 
 ```GO
-    {
-            "url" : "https://www.udemy.com"
+     {
+        "url" : "https://www.udemy.com",
+        "name" : "Udemy"
     }
 ```
 
@@ -42,9 +43,10 @@
 
 ```GO
 {
-    "code": "hbS9RwPVR",
+    "name": "Udemy",
+    "code": "910HGwEVR",
     "url": "https://www.udemy.com",
-    "created_at": 1682226936
+    "created_at": 1682230484
 }
 ```
 ## GET
