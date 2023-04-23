@@ -8,6 +8,7 @@
 * ### PostMan
 * ### MongoDb
 * ### Redis
+* ### Chi Router
 ***
 ## Libraries
 
@@ -16,10 +17,18 @@
 
 * ### go get github.com/pkg/errors
 
+* ### go get -u github.com/go-chi/chi/v5
+
 
 ## EndPoints
 
-* ##   POST localhost:8000
+* ###  POST localhost:8000
+* ### GET localhost:8000/{code}
+
+<br>
+
+## POST 
+* ### localhost:8000
 
 >> Request Body 
 
@@ -38,8 +47,8 @@
     "created_at": 1682226936
 }
 ```
-
-* ## GET localhost:8000/{code}
+## GET
+*  <span style="color:Orange">localhost:8000/{code}</span>
 
  Use the code in the response body returned from the **POST** request to make a call to the GET endpoint   **localhost:8000**
 
