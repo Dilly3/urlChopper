@@ -77,6 +77,7 @@ func (m *MongoRepository) Store(redirect *internal.Redirect) error {
 	collection := getCollection(m.client, m.database, REDIRECTS)
 	_, err := collection.InsertOne(
 		context.Background(), bson.M{
+			"name":       redirect.Name,
 			"code":       redirect.Code,
 			"url":        redirect.Url,
 			"created_at": redirect.CreatedAt,

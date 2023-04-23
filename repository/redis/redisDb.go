@@ -41,6 +41,7 @@ func (r *RedisRepository) Find(code string) (*internal.Redirect, error) {
 	redirect.Code = data["code"]
 	redirect.CreatedAt = created_at
 	redirect.Url = data["url"]
+	redirect.Name = data["name"]
 	return &redirect, nil
 }
 
