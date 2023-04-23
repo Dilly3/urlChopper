@@ -56,3 +56,21 @@ The Url redirects to the orignal Url .
 
 Example 
  <span style="color:Aqua">localhost:8000/hbS9RwPVR</span>  redirects to ***https://www.udemy.com***
+
+ <br>
+
+ ## Start Program
+
+ ###  .env file
+
+ ```GO
+
+ PORT= 8000 || {any choice of port}
+URL_DB=mongo
+MONGO_URL={mongodb url}
+MONGO_TIMEOUT=30
+
+```
+
+```GO
+terminal> make run
