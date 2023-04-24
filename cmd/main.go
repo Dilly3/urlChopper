@@ -40,13 +40,13 @@ func main() {
 	c := make(chan os.Signal, 1)
 	go func() {
 		signal.Notify(c, syscall.SIGINT)
-		errs <- fmt.Errorf("%s", <-c)
-		defer close(errs)
+
 	}()
 
-	fmt.Printf(" terminated ====>  ERR1 : %v\n", <-c)
+	errs <- fmt.Errorf("%s", <-c)
+	close(errs)
+	fmt.Printf(" terminated ====>  ERR1 : %v\n", <-errs)
 	fmt.Printf(" terminated ====>  ERR2 : %v\n", <-errs)
-	fmt.Printf(" terminated ====>  ERR3 : %v\n", <-errs)
 
 	fmt.Println("\nshutting down server")
 
