@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/dilly3/urlshortner/api"
 	"github.com/dilly3/urlshortner/internal"
@@ -33,6 +32,7 @@ func main() {
 	app := api.NewServer(handler, chi.NewRouter())
 
 	errs := make(chan error, 2)
+
 	go func() {
 		fmt.Printf("listening on port => %v\n", port)
 		errs <- http.ListenAndServe(port, app.Router)
@@ -40,10 +40,14 @@ func main() {
 	c := make(chan os.Signal, 1)
 	go func() {
 		signal.Notify(c, syscall.SIGINT)
-		errs <- fmt.Errorf("%s\n", <-c)
+		errs <- fmt.Errorf("%s", <-c)
+		defer close(errs)
 	}()
-	fmt.Printf(" terminated ====>  ERR : %s\n", <-c)
+
+	fmt.Printf(" terminated ====>  ERR1 : %v\n", <-c)
+	fmt.Printf(" terminated ====>  ERR2 : %v\n", <-errs)
+	fmt.Printf(" terminated ====>  ERR3 : %v\n", <-errs)
+
 	fmt.Println("\nshutting down server")
-	time.Sleep(time.Millisecond * 3000)
 
 }

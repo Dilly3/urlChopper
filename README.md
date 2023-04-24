@@ -7,6 +7,7 @@
 
 * ### PostMan
 * ### MongoDb
+* ### Postgres
 * ### Redis
 * ### Chi Router
 ***
@@ -69,9 +70,15 @@ Example
  ```GO
 
  PORT= 8000 || {any choice of port}
-URL_DB=mongo
+ choose db 
+URL_DB= { any of mongo || postgres } // URL_DB=mongo or URL_DB=postgres
 MONGO_URL={mongodb url}
 MONGO_TIMEOUT=30
+
+POSTGRES_PORT=****
+POSTGRES_DBNAME=Redirects // or any Database name of choice
+POSTGRES_PASSWORD=****
+POSTGRES_USER=****
 
 ```
 
