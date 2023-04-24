@@ -58,7 +58,7 @@
 The Url redirects to the orignal Url .
 
 Example: 
- <span style="color:Aqua">***localhost:8000/910HGwEVR***</span>   redirects to ***https://www.udemy.com***
+ <span style="color:Aqua">localhost:8000/***910HGwEVR***</span>   redirects to ***https://www.udemy.com***
 
  <br>
 
